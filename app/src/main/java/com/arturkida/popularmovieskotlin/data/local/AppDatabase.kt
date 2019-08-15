@@ -16,14 +16,16 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         var INSTANCE: AppDatabase? = null
 
-        fun getAppDatabase(context: Context): AppDatabase? {
-            if(INSTANCE == null) {
-                synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(
-                        context,
-                        AppDatabase::class.java,
-                        MOVIES_DATABASE
-                    ).build()
+        fun getAppDatabase(context: Context?): AppDatabase? {
+            context?.let {
+                if (INSTANCE == null) {
+                    synchronized(AppDatabase::class) {
+                        INSTANCE = Room.databaseBuilder(
+                            context,
+                            AppDatabase::class.java,
+                            MOVIES_DATABASE
+                        ).build()
+                    }
                 }
             }
 

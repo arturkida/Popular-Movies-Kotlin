@@ -11,13 +11,14 @@ import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
 import com.arturkida.popularmovieskotlin.utils.SearchType
 
-class MoviesViewModel(context: Context) : ViewModel() {
+class MoviesViewModel(
+    private val repository: MovieRepository
+) : ViewModel() {
 
     val genres = MutableLiveData<List<Genre>>()
     val popularMovies: MutableLiveData<List<Movie>>? = MutableLiveData()
     var filteredMovies = mutableListOf<Movie>()
 
-    private val repository = MovieRepository(context)
     val favoriteMovies = repository.allFavoriteMovies
 
     private var retryGetGenresCount = 0

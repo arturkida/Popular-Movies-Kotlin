@@ -7,7 +7,7 @@ import android.util.Log
 import com.arturkida.popularmovieskotlin.model.Movie
 import com.arturkida.popularmovieskotlin.utils.Constants
 
-class MovieRepository(context: Context) {
+class MovieRepository(context: Context?) {
 
     private var movieDao: MovieDao?
     var allFavoriteMovies: LiveData<List<Movie>>?

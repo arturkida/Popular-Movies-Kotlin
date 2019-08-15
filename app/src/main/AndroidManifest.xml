@@ -13,12 +13,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name="com.arturkida.popularmovieskotlin.ui.details.DetailsActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="portrait">
+>
         </activity>
-        <activity android:name="com.arturkida.popularmovieskotlin.ui.home.MoviesActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="portrait">
+        <activity android:name="com.arturkida.popularmovieskotlin.ui.home.MoviesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
