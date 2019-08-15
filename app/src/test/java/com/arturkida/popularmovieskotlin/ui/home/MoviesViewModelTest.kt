@@ -41,7 +41,7 @@ class MoviesViewModelTest : BaseUnitTest() {
         movieDao = mock(MovieDao::class.java)
         context = mock(Context::class.java)
 
-        moviesViewModel = spy(MoviesViewModel(context))
+        moviesViewModel = spy(MoviesViewModel(movieRepository))
 
         MockitoAnnotations.initMocks(this)
     }
