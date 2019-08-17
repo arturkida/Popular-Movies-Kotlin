@@ -1,14 +1,8 @@
 package com.arturkida.popularmovieskotlin.ui.home
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.content.Context
 import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.data.remote.ApiImpl
-import com.arturkida.popularmovieskotlin.data.remote.ApiResponse
-import com.arturkida.popularmovieskotlin.idlingresource.EspressoIdlingResource
-import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
 import com.arturkida.popularmovieskotlin.utils.SearchType
 
@@ -19,18 +13,7 @@ class MoviesViewModel(
     private val genres = getGenres()
     private val popularMovies = getPopularMovies()
     private val favoriteMovies = getFavoritesMovies()
-
     private var filteredMovies = mutableListOf<Movie>()
-
-    private var retryGetGenresCount = 0
-
-    fun retryGetGenres() {
-        retryGetGenresCount++
-
-        if (retryGetGenresCount <= 3) {
-            getGenres()
-        }
-    }
 
     fun mustShowMoviesList(moviesList: List<Movie>) = moviesList.isNotEmpty()
 

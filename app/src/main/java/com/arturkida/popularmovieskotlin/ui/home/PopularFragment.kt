@@ -36,6 +36,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         ViewModelProviders.of(this, factory)
             .get(MoviesViewModel::class.java)
     }
+
     private val adapter: MoviesListAdapter by lazy {
             MoviesListAdapter(context, moviesList, this)
     }
@@ -55,9 +56,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun setupFragment() {
         setRecyclerView()
-//        setObservers()
         setListeners()
-        removeFocus()
 
         getGenres()
         getPopularMovies()
@@ -82,6 +81,8 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 updateMoviesFavoriteStatus()
                 updateAdapter(moviesList)
                 showMovieScreen(moviesList)
+                swipe_movie_list.isRefreshing = false
+                removeFocus()
             }
         })
     }
@@ -98,6 +99,14 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private fun setListeners() {
         setSearchListenerByMovieTitle()
         setSwipeToRefreshListener()
+        setSearchButtonListener()
+    }
+
+    private fun setSearchButtonListener() {
+        bt_search_popular.setOnClickListener {
+            searchMoviesBy(SearchType.TITLE, et_search_popular_movies)
+            hideKeyboard()
+        }
     }
 
     private fun setSwipeToRefreshListener() {
@@ -141,7 +150,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
-        Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
         clearMoviesList()
         filteredList.addAll(filteredMovies)
         updateAdapter(filteredList)
@@ -195,6 +203,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         context?.let {
             rv_popular_movie_list.adapter = adapter
         }
+        rv_popular_movie_list.isNestedScrollingEnabled = false
     }
 
     override fun updateFavorite(position: Int) {
@@ -204,6 +213,8 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         } else {
             viewModel.deleteFavoriteMovie(moviesList[position])
         }
+
+        fragment_popular_movies.requestFocus()
     }
 
     override fun onClick(movie: Movie) {
@@ -216,8 +227,5 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         intent.putExtra(Constants.INTENT_MOVIE_INFO, selectedMovie)
 
         startActivity(intent)
-
-        Log.i(Constants.LOG_INFO, "Starting Details Activity from popular movies list")
-        Log.i(Constants.LOG_INFO, "Movie data: $selectedMovie")
     }
 }

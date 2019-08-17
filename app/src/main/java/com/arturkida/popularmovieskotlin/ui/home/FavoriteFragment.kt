@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.arturkida.popularmovieskotlin.R
@@ -55,9 +56,10 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         setupFragment()
     }
 
-    fun setupFragment() {
+    private fun setupFragment() {
         setRecyclerView()
         setListeners()
+        setSearchSpinner()
         removeFocus()
 
         getGenres()
@@ -69,26 +71,34 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun setListeners() {
-        setSearchListenerByMovieTitle()
-        setSearchListenerByMovieYear()
+        setSearchListenerByKeyboardButton()
+        setSearchButtonListener()
     }
 
-    private fun setSearchListenerByMovieTitle() {
-        et_search_favorite_movies_title.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                clearMoviesList()
-                searchMoviesBy(SearchType.TITLE, et_search_favorite_movies_title)
-                hideKeyboard()
+    private fun setSearchButtonListener() {
+        bt_search_favorite.setOnClickListener {
+            // TODO put it into viewmodel
+            when (spinner_search_favorite.selectedItemPosition) {
+                0 -> searchMoviesBy(SearchType.TITLE, et_search_favorite_movies)
+                1 -> searchMoviesBy(SearchType.YEAR, et_search_favorite_movies)
             }
-            false
+
+            hideKeyboard()
         }
     }
 
-    private fun setSearchListenerByMovieYear() {
-        et_search_favorite_movies_year.setOnEditorActionListener { _, actionId, _ ->
+    private fun setSearchSpinner() {
+        val spinnerAdapter =
+            ArrayAdapter.createFromResource(context, R.array.search_types_array, R.layout.spinner_item)
+
+        spinner_search_favorite.adapter = spinnerAdapter
+    }
+
+    private fun setSearchListenerByKeyboardButton() {
+        et_search_favorite_movies.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 clearMoviesList()
-                searchMoviesBy(SearchType.YEAR, et_search_favorite_movies_year)
+                searchMoviesBy(SearchType.TITLE, et_search_favorite_movies)
                 hideKeyboard()
             }
             false
@@ -114,7 +124,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
-        Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
         clearMoviesList()
         filteredList.addAll(filteredMovies)
         adapter.updateMovies(filteredList)
@@ -150,7 +159,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
             }
 
             adapter.updateMovies(moviesList)
-            Log.i("favoritos", moviesList.toString())
         })
     }
 
@@ -183,6 +191,8 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         context?.let {
             rv_favorite_movie_list.adapter = adapter
         }
+
+        rv_favorite_movie_list.isNestedScrollingEnabled = false
     }
 
     override fun updateFavorite(position: Int) {
@@ -199,8 +209,5 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         intent.putExtra(Constants.INTENT_MOVIE_INFO, movie)
 
         startActivity(intent)
-
-        Log.i(Constants.LOG_INFO, "Starting Details Activity from favorite movies list")
-        Log.i(Constants.LOG_INFO, "Movie data: $movie")
     }
 }

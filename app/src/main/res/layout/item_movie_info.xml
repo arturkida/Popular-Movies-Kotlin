@@ -55,6 +55,6 @@
             app:layout_constraintStart_toEndOf="@id/iv_movie_poster"
             app:layout_constraintLeft_toRightOf="@id/iv_movie_poster"
             app:srcCompat="@android:drawable/btn_star_big_off"
-    android:layout_gravity="start|bottom"/>
+            android:layout_gravity="start|bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>

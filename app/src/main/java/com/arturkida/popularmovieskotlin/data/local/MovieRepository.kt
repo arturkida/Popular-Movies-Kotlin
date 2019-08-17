@@ -1,7 +1,6 @@
 package com.arturkida.popularmovieskotlin.data.local
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
