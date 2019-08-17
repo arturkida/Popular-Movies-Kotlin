@@ -18,9 +18,9 @@ class MoviesViewModel(
 
     private val genres = getGenres()
     private val popularMovies = getPopularMovies()
-    var filteredMovies = mutableListOf<Movie>()
+    private val favoriteMovies = getFavoritesMovies()
 
-    val favoriteMovies = repository.allFavoriteMovies
+    private var filteredMovies = mutableListOf<Movie>()
 
     private var retryGetGenresCount = 0
 
@@ -70,9 +70,11 @@ class MoviesViewModel(
         return false
     }
 
-    fun getGenres() : LiveData<List<Genre>?> = ApiImpl().getGenres()
+    fun getGenres() = ApiImpl().getGenres()
 
-    fun getPopularMovies() : LiveData<List<Movie>?> = ApiImpl().getPopularMovies()
+    fun getPopularMovies() = ApiImpl().getPopularMovies()
+
+    fun getFavoritesMovies() = repository.getMoviesFromDatabase()
 
     fun searchMovies(searchText: String, searchType: SearchType, searchList: List<Movie>): MutableList<Movie> {
 

@@ -1,6 +1,7 @@
 package com.arturkida.popularmovieskotlin.data.local
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
@@ -9,14 +10,16 @@ import com.arturkida.popularmovieskotlin.utils.Constants
 
 class MovieRepository(context: Context?) {
 
-    private var movieDao: MovieDao?
-    var allFavoriteMovies: LiveData<List<Movie>>?
+    private val movieDao: MovieDao?
+    private val allFavoriteMovies: LiveData<List<Movie>?>?
 
     init {
         val database = AppDatabase.getAppDatabase(context)
         movieDao = database?.movieDao()
         allFavoriteMovies = movieDao?.getAllMovies()
     }
+
+    fun getMoviesFromDatabase() : LiveData<List<Movie>?>? = allFavoriteMovies
 
     fun addMovie(movie: Movie) {
         InsertMovieAsyncTask(movieDao).execute(movie)

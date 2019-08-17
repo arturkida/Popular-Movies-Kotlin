@@ -55,12 +55,13 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun setupFragment() {
         setRecyclerView()
-        setObservers()
+//        setObservers()
         setListeners()
         removeFocus()
 
         getGenres()
         getPopularMovies()
+        getFavoritesMovies()
     }
 
     private fun getGenres() {
@@ -77,8 +78,18 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
             movies?.let {
                 moviesList.clear()
                 moviesList.addAll(it)
+                updateMoviesFavoriteStatus()
                 updateAdapter(moviesList)
                 showMovieScreen(moviesList)
+            }
+        })
+    }
+
+    private fun getFavoritesMovies() {
+        viewModel.getFavoritesMovies()?.observe(this, Observer {favorites ->
+            favorites?.let {
+                updateMoviesFavoriteStatus()
+                updateAdapter(moviesList)
             }
         })
     }
@@ -144,14 +155,14 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         fragment_popular_movies.requestFocus()
     }
 
-    private fun setObservers() {
-        viewModel.favoriteMovies?.observe(this, Observer { movies ->
-            movies?.let {
-                updateMoviesFavoriteStatus()
-                updateAdapter(moviesList)
-            }
-        })
-    }
+//    private fun setObservers() {
+//        viewModel.favoriteMovies?.observe(this, Observer { movies ->
+//            movies?.let {
+//                updateMoviesFavoriteStatus()
+//                updateAdapter(moviesList)
+//            }
+//        })
+//    }
 
     private fun updateAdapter(list: MutableList<Movie>) {
         adapter.updateMovies(list)
