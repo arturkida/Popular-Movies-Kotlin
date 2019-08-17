@@ -192,7 +192,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun setRecyclerView() {
         rv_popular_movie_list.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
-//        rv_popular_movie_list.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         context?.let {
             rv_popular_movie_list.adapter = adapter
         }
