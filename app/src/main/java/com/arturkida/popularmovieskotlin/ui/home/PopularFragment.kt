@@ -69,6 +69,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
             genres?.let {
                 genresList.clear()
                 genresList.addAll(it)
+                Log.i("configura", genresList.toString())
             }
         })
     }
@@ -205,18 +206,18 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         }
     }
 
-    override fun onClick(position: Int) {
-        var movie = moviesList[position]
+    override fun onClick(movie: Movie) {
+        var selectedMovie = movie
 
-        movie = viewModel.populateGenresNameFrom(movie)
+        selectedMovie = viewModel.populateGenresNameFrom(selectedMovie)
 
         val intent = DetailsActivity.getIntent(context)
 
-        intent.putExtra(Constants.INTENT_MOVIE_INFO, movie)
+        intent.putExtra(Constants.INTENT_MOVIE_INFO, selectedMovie)
 
         startActivity(intent)
 
         Log.i(Constants.LOG_INFO, "Starting Details Activity from popular movies list")
-        Log.i(Constants.LOG_INFO, "Movie data: $movie")
+        Log.i(Constants.LOG_INFO, "Movie data: $selectedMovie")
     }
 }

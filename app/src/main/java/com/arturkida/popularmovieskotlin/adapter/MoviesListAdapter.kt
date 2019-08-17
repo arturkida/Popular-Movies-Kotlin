@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_movie_info.view.*
 
 class MoviesListAdapter(private val context: Context?,
-                        private var movies: List<Movie>,
+                        private var movies: MutableList<Movie>,
                         private val listener: MovieItemClickListener)
     : RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
@@ -28,7 +28,7 @@ class MoviesListAdapter(private val context: Context?,
 
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) = holder.bind(movies[position])
 
-    fun updateMovies(movies: List<Movie>) {
+    fun updateMovies(movies: MutableList<Movie>) {
         this.movies = movies
         notifyDataSetChanged()
     }
@@ -38,7 +38,7 @@ class MoviesListAdapter(private val context: Context?,
 
         init {
             itemView.container_item_list.setOnClickListener {
-                listener.onClick(adapterPosition)
+                listener.onClick(movies[adapterPosition])
             }
 
             itemView.iv_item_favorite_star.setOnClickListener {
@@ -89,13 +89,12 @@ class MoviesListAdapter(private val context: Context?,
         }
 
         override fun onClick(v: View?) {
-            listener.onClick(adapterPosition)
-            Log.i(Constants.LOG_INFO, "AAAAAAAAAAAAA")
+            listener.onClick(movies[adapterPosition])
         }
     }
 
     interface MovieItemClickListener {
-        fun onClick(position: Int)
+        fun onClick(movie: Movie)
         fun updateFavorite(position: Int)
     }
 }

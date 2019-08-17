@@ -193,8 +193,7 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         }
     }
 
-    override fun onClick(position: Int) {
-        val movie = moviesList[position]
+    override fun onClick(movie: Movie) {
         val intent = DetailsActivity.getIntent(context)
 
         intent.putExtra(Constants.INTENT_MOVIE_INFO, movie)

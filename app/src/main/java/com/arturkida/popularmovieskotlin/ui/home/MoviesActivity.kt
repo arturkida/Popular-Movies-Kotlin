@@ -13,9 +13,9 @@ class MoviesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
 
-        if (savedInstanceState == null) {
+//        if (savedInstanceState == null) {
             setupTabLayout()
-        }
+//        }
     }
 
     private fun setupTabLayout() {
