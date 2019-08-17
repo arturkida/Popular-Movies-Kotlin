@@ -36,6 +36,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         ViewModelProviders.of(this, factory)
             .get(MoviesViewModel::class.java)
     }
+
     private val adapter: MoviesListAdapter by lazy {
             MoviesListAdapter(context, moviesList, this)
     }
@@ -98,6 +99,13 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private fun setListeners() {
         setSearchListenerByMovieTitle()
         setSwipeToRefreshListener()
+        setOnButtonClickListener()
+    }
+
+    private fun setOnButtonClickListener() {
+        bt_search_popular.setOnClickListener {
+            searchMoviesBy(SearchType.TITLE, et_search_popular_movies)
+        }
     }
 
     private fun setSwipeToRefreshListener() {
