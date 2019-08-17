@@ -13,9 +13,7 @@
         <android.support.constraint.ConstraintLayout
                 android:id="@+id/fragment_popular_movies"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true">
+                android:layout_height="wrap_content">
 
             <EditText
                     android:id="@+id/et_search_popular_movies"
