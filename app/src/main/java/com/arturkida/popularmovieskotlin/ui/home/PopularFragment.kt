@@ -57,7 +57,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private fun setupFragment() {
         setRecyclerView()
         setListeners()
-        removeFocus()
 
         getGenres()
         getPopularMovies()
@@ -83,6 +82,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 updateAdapter(moviesList)
                 showMovieScreen(moviesList)
                 swipe_movie_list.isRefreshing = false
+                removeFocus()
             }
         })
     }
@@ -99,12 +99,13 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private fun setListeners() {
         setSearchListenerByMovieTitle()
         setSwipeToRefreshListener()
-        setOnButtonClickListener()
+        setSearchButtonListener()
     }
 
-    private fun setOnButtonClickListener() {
+    private fun setSearchButtonListener() {
         bt_search_popular.setOnClickListener {
             searchMoviesBy(SearchType.TITLE, et_search_popular_movies)
+            hideKeyboard()
         }
     }
 
@@ -149,7 +150,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
-        Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
         clearMoviesList()
         filteredList.addAll(filteredMovies)
         updateAdapter(filteredList)
@@ -227,8 +227,5 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         intent.putExtra(Constants.INTENT_MOVIE_INFO, selectedMovie)
 
         startActivity(intent)
-
-        Log.i(Constants.LOG_INFO, "Starting Details Activity from popular movies list")
-        Log.i(Constants.LOG_INFO, "Movie data: $selectedMovie")
     }
 }
