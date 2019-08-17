@@ -55,7 +55,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun setupFragment() {
         setRecyclerView()
-//        setObservers()
         setListeners()
         removeFocus()
 
@@ -193,9 +192,11 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun setRecyclerView() {
         rv_popular_movie_list.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
+//        rv_popular_movie_list.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         context?.let {
             rv_popular_movie_list.adapter = adapter
         }
+        rv_popular_movie_list.isNestedScrollingEnabled = false
     }
 
     override fun updateFavorite(position: Int) {
@@ -205,6 +206,8 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         } else {
             viewModel.deleteFavoriteMovie(moviesList[position])
         }
+
+        fragment_popular_movies.requestFocus()
     }
 
     override fun onClick(movie: Movie) {

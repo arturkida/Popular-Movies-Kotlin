@@ -55,7 +55,7 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         setupFragment()
     }
 
-    fun setupFragment() {
+    private fun setupFragment() {
         setRecyclerView()
         setListeners()
         removeFocus()
@@ -183,6 +183,8 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         context?.let {
             rv_favorite_movie_list.adapter = adapter
         }
+
+        rv_favorite_movie_list.isNestedScrollingEnabled = false
     }
 
     override fun updateFavorite(position: Int) {

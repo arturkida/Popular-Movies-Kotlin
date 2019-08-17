@@ -2,14 +2,12 @@ package com.arturkida.popularmovieskotlin.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arturkida.popularmovieskotlin.BuildConfig
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.model.Movie
-import com.arturkida.popularmovieskotlin.utils.Constants
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_movie_info.view.*
 
