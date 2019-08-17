@@ -58,7 +58,21 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         setListeners()
         removeFocus()
 
+        getGenres()
         getPopularMovies()
+    }
+
+    private fun getGenres() {
+        viewModel.getGenres().observe(this, Observer {genres ->
+            genres?.let {
+                genresList.clear()
+                genresList.addAll(it)
+            }
+        })
+    }
+
+    private fun getPopularMovies() {
+        viewModel.getPopularMovies()
     }
 
     private fun setListeners() {
@@ -126,16 +140,16 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun setObservers() {
-        viewModel.genres.observe(this, Observer { genres ->
-            genres?.let {
-                genresList.addAll(it)
-
-                // Retry
-                if (genresList.isEmpty()) {
-                    viewModel.retryGetGenres()
-                }
-            }
-        })
+//        viewModel.genres.observe(this, Observer { genres ->
+//            genres?.let {
+//                genresList.addAll(it)
+//
+//                // Retry
+//                if (genresList.isEmpty()) {
+//                    viewModel.retryGetGenres()
+//                }
+//            }
+//        })
 
         viewModel.popularMovies?.observe(this, Observer { movies ->
             movies?.let {
@@ -203,10 +217,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         context?.let {
             rv_popular_movie_list.adapter = adapter
         }
-    }
-
-    private fun getPopularMovies() {
-        viewModel.getPopularMovies()
     }
 
     override fun updateFavorite(position: Int) {

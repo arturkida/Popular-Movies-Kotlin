@@ -1,5 +1,6 @@
 package com.arturkida.popularmovieskotlin.ui.home
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
@@ -15,7 +16,7 @@ class MoviesViewModel(
     private val repository: MovieRepository
 ) : ViewModel() {
 
-    val genres = MutableLiveData<List<Genre>>()
+    private val genres = getGenres()
     val popularMovies: MutableLiveData<List<Movie>>? = MutableLiveData()
     var filteredMovies = mutableListOf<Movie>()
 
@@ -93,20 +94,9 @@ class MoviesViewModel(
         popularMovies?.postValue(result)
     }
 
-    fun getGenres() {
+    fun getGenres() : LiveData<List<Genre>?> {
         EspressoIdlingResource.increment()
-        ApiImpl()
-            .getGenres(object: ApiResponse<List<Genre>> {
-                override fun onSuccess(result: List<Genre>) {
-                    EspressoIdlingResource.decrement()
-                    genres.postValue(result)
-                }
-
-                override fun onFailure(error: Throwable?) {
-                    EspressoIdlingResource.decrement()
-                    genres.postValue(listOf())
-                }
-            })
+        return ApiImpl().getGenres()
     }
 
     fun searchMovies(searchText: String, searchType: SearchType, searchList: List<Movie>): MutableList<Movie> {

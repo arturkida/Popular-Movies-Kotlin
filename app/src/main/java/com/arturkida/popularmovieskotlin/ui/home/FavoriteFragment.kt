@@ -132,12 +132,12 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun setObservers() {
-        viewModel.genres.observe(this, Observer { genres ->
-            genres?.let {
-                genresList.addAll(it)
-                Log.i(Constants.LOG_INFO, "Genres updated")
-            }
-        })
+//        viewModel.genres.observe(this, Observer { genres ->
+//            genres?.let {
+//                genresList.addAll(it)
+//                Log.i(Constants.LOG_INFO, "Genres updated")
+//            }
+//        })
 
         viewModel.favoriteMovies?.observe(this, Observer { favoritesList ->
             moviesList.clear()
