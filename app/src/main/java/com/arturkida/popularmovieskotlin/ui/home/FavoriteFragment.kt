@@ -29,6 +29,7 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
+    private var filteredList = mutableListOf<Movie>()
 
     private val viewModel by lazy {
         val repository = MovieRepository(context)
@@ -56,7 +57,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     fun setupFragment() {
         setRecyclerView()
-//        setObservers()
         setListeners()
         removeFocus()
 
@@ -65,7 +65,7 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun clearMoviesList() {
-        moviesList.clear()
+        filteredList.clear()
     }
 
     private fun setListeners() {
@@ -99,7 +99,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         val searchString = searchBar.text.toString()
 
         if (searchString.isBlank()) {
-            moviesList.addAll(moviesList)
             adapter.updateMovies(moviesList)
             showMovieScreen(moviesList)
         } else {
@@ -116,9 +115,10 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
         Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
-        moviesList.addAll(filteredMovies)
-        adapter.updateMovies(filteredMovies)
-        showMovieScreen(filteredMovies)
+        clearMoviesList()
+        filteredList.addAll(filteredMovies)
+        adapter.updateMovies(filteredList)
+        showMovieScreen(filteredList)
         searchBar.text.clear()
     }
 
@@ -130,26 +130,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity?.window?.currentFocus?.windowToken, 0)
     }
-
-    //    private fun setObservers() {
-////        viewModel.genres.observe(this, Observer { genres ->
-////            genres?.let {
-////                genresList.addAll(it)
-////                Log.i(Constants.LOG_INFO, "Genres updated")
-////            }
-////        })
-//
-//        viewModel.favoriteMovies?.observe(this, Observer { favoritesList ->
-//            moviesList.clear()
-//
-//            favoritesList?.let {
-//                moviesList.addAll(it)
-//                showMovieScreen(it)
-//            }
-//
-//            adapter.updateMovies(moviesList)
-//        })
-//    }
 
     private fun getGenres() {
         viewModel.getGenres().observe(this, Observer {genres ->

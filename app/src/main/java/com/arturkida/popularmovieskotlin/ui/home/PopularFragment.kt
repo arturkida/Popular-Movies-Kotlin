@@ -141,28 +141,19 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
         Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
-        filteredList.clear()
+        clearMoviesList()
         filteredList.addAll(filteredMovies)
         updateAdapter(filteredList)
         searchBar.text.clear()
     }
 
     private fun clearMoviesList() {
-        moviesList.clear()
+        filteredList.clear()
     }
 
     private fun removeFocus() {
         fragment_popular_movies.requestFocus()
     }
-
-//    private fun setObservers() {
-//        viewModel.favoriteMovies?.observe(this, Observer { movies ->
-//            movies?.let {
-//                updateMoviesFavoriteStatus()
-//                updateAdapter(moviesList)
-//            }
-//        })
-//    }
 
     private fun updateAdapter(list: MutableList<Movie>) {
         adapter.updateMovies(list)
