@@ -80,6 +80,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 moviesList.clear()
                 moviesList.addAll(it)
                 updateMoviesFavoriteStatus()
+                swipe_movie_list.isRefreshing = false
                 updateAdapter(moviesList)
                 showMovieScreen(moviesList)
             }
