@@ -69,26 +69,18 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun setListeners() {
-        setSearchListenerByMovieTitle()
-        setSearchListenerByMovieYear()
-    }
-
-    private fun setSearchListenerByMovieTitle() {
-        et_search_favorite_movies_title.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                clearMoviesList()
-                searchMoviesBy(SearchType.TITLE, et_search_favorite_movies_title)
-                hideKeyboard()
-            }
-            false
+        setSearchListenerByKeyboardButton()
+        bt_search_favorite.setOnClickListener {
+            // TODO put it into viewmodel
+            searchMoviesBy(SearchType.TITLE, et_search_favorite_movies)
         }
     }
 
-    private fun setSearchListenerByMovieYear() {
-        et_search_favorite_movies_year.setOnEditorActionListener { _, actionId, _ ->
+    private fun setSearchListenerByKeyboardButton() {
+        et_search_favorite_movies.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 clearMoviesList()
-                searchMoviesBy(SearchType.YEAR, et_search_favorite_movies_year)
+                searchMoviesBy(SearchType.TITLE, et_search_favorite_movies)
                 hideKeyboard()
             }
             false

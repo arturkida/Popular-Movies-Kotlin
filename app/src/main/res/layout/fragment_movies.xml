@@ -22,7 +22,7 @@
                     android:focusableInTouchMode="true">
 
                 <android.support.constraint.ConstraintLayout
-                        android:id="@+id/container_search_popular"
+                        android:id="@+id/container_search_favorite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -64,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/default_margin"
-                        app:layout_constraintTop_toBottomOf="@id/container_search_popular"
+                        app:layout_constraintTop_toBottomOf="@id/container_search_favorite"
                         android:visibility="gone"/>
 
             </android.support.constraint.ConstraintLayout>
