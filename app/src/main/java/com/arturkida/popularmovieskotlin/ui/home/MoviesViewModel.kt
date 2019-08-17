@@ -17,7 +17,7 @@ class MoviesViewModel(
 ) : ViewModel() {
 
     private val genres = getGenres()
-    val popularMovies: MutableLiveData<List<Movie>>? = MutableLiveData()
+    private val popularMovies = getPopularMovies()
     var filteredMovies = mutableListOf<Movie>()
 
     val favoriteMovies = repository.allFavoriteMovies
@@ -70,34 +70,9 @@ class MoviesViewModel(
         return false
     }
 
-    fun getPopularMovies() {
-        if (genres.value.isNullOrEmpty()) {
-            getGenres()
-        }
+    fun getGenres() : LiveData<List<Genre>?> = ApiImpl().getGenres()
 
-        EspressoIdlingResource.increment()
-        ApiImpl()
-            .getPopularMovies(object: ApiResponse<List<Movie>> {
-            override fun onSuccess(result: List<Movie>) {
-                EspressoIdlingResource.decrement()
-                postPopularMoviesResult(result)
-            }
-
-            override fun onFailure(error: Throwable?) {
-                EspressoIdlingResource.decrement()
-                postPopularMoviesResult(listOf())
-            }
-        })
-    }
-
-    fun postPopularMoviesResult(result: List<Movie>) {
-        popularMovies?.postValue(result)
-    }
-
-    fun getGenres() : LiveData<List<Genre>?> {
-        EspressoIdlingResource.increment()
-        return ApiImpl().getGenres()
-    }
+    fun getPopularMovies() : LiveData<List<Movie>?> = ApiImpl().getPopularMovies()
 
     fun searchMovies(searchText: String, searchType: SearchType, searchList: List<Movie>): MutableList<Movie> {
 

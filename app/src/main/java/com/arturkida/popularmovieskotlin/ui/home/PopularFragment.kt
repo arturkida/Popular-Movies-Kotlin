@@ -28,6 +28,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
+    private var filteredList = mutableListOf<Movie>()
 
     private val viewModel by lazy {
         val repository = MovieRepository(context)
@@ -72,7 +73,14 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun getPopularMovies() {
-        viewModel.getPopularMovies()
+        viewModel.getPopularMovies().observe(this, Observer {movies ->
+            movies?.let {
+                moviesList.clear()
+                moviesList.addAll(it)
+                updateAdapter(moviesList)
+                showMovieScreen(moviesList)
+            }
+        })
     }
 
     private fun setListeners() {
@@ -103,31 +111,28 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun searchMoviesBy(searchType: SearchType, searchBar: EditText) {
-        viewModel.popularMovies?.value?.let { popularList ->
-
             val searchString = searchBar.text.toString()
 
             if (searchString.isBlank()) {
-                moviesList.addAll(popularList)
-                adapter.updateMovies(popularList)
-                showMovieScreen(popularList)
+                updateAdapter(moviesList)
+                showMovieScreen(moviesList)
             } else {
                 val filteredMovies = viewModel.searchMovies(
                     searchString,
                     searchType,
-                    popularList
+                    moviesList
                 )
 
                 updateMoviesListBy(filteredMovies, searchBar)
-                showMovieScreen(filteredMovies)
+                showMovieScreen(filteredList)
             }
-        }
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
         Log.i(Constants.LOG_INFO, "Updating favorite movies list with search by title")
-        moviesList.addAll(filteredMovies)
-        adapter.updateMovies(filteredMovies)
+        filteredList.clear()
+        filteredList.addAll(filteredMovies)
+        updateAdapter(filteredList)
         searchBar.text.clear()
     }
 
@@ -140,42 +145,16 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun setObservers() {
-//        viewModel.genres.observe(this, Observer { genres ->
-//            genres?.let {
-//                genresList.addAll(it)
-//
-//                // Retry
-//                if (genresList.isEmpty()) {
-//                    viewModel.retryGetGenres()
-//                }
-//            }
-//        })
-
-        viewModel.popularMovies?.observe(this, Observer { movies ->
-            movies?.let {
-                updateMoviesList(it)
-                updateMoviesFavoriteStatus()
-                updateAdapter()
-                showMovieScreen(it)
-                swipe_movie_list.isRefreshing = false
-            }
-        })
-
         viewModel.favoriteMovies?.observe(this, Observer { movies ->
             movies?.let {
                 updateMoviesFavoriteStatus()
-                updateAdapter()
+                updateAdapter(moviesList)
             }
         })
     }
 
-    private fun updateMoviesList(it: List<Movie>) {
-        clearMoviesList()
-        moviesList.addAll(it)
-    }
-
-    private fun updateAdapter() {
-        adapter.updateMovies(moviesList)
+    private fun updateAdapter(list: MutableList<Movie>) {
+        adapter.updateMovies(list)
     }
 
     private fun updateMoviesFavoriteStatus() {
@@ -202,10 +181,6 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private fun showPopularMoviesList() {
         rv_popular_movie_list.visibility = View.VISIBLE
         tv_empty_popular_list.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        progress_bar_popular.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
