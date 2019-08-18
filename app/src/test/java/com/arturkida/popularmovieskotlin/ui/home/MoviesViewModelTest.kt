@@ -6,6 +6,7 @@ import com.arturkida.popularmovieskotlin.BaseUnitTest
 import com.arturkida.popularmovieskotlin.data.local.AppDatabase
 import com.arturkida.popularmovieskotlin.data.local.MovieDao
 import com.arturkida.popularmovieskotlin.data.local.MovieRepository
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
 import com.arturkida.popularmovieskotlin.utils.SearchType
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.whenever

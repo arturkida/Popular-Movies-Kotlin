@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,30 +16,38 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.adapter.MoviesListAdapter
+import com.arturkida.popularmovieskotlin.data.local.AppDatabase
 import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModelFactory
 import com.arturkida.popularmovieskotlin.ui.details.DetailsActivity
 import com.arturkida.popularmovieskotlin.utils.Constants
 import com.arturkida.popularmovieskotlin.utils.SearchType
 import kotlinx.android.synthetic.main.fragment_favorite.*
+import org.koin.android.ext.android.inject
 
 
 class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
+
+    private val repository by inject<AppDatabase>()
 
     private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
     private var filteredList = mutableListOf<Movie>()
 
     private val viewModel by lazy {
-        val repository = MovieRepository(context)
+        val repository = MovieRepository(repository.movieDao())
         val factory = MoviesViewModelFactory(repository)
         ViewModelProviders.of(this, factory)
             .get(MoviesViewModel::class.java)
     }
+
     private val adapter: MoviesListAdapter by lazy {
         MoviesListAdapter(context, moviesList, this)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,4 +1,4 @@
-package com.arturkida.popularmovieskotlin.ui.home
+package com.arturkida.popularmovieskotlin.ui
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

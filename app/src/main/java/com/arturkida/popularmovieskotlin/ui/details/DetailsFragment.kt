@@ -8,19 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import com.arturkida.popularmovieskotlin.BuildConfig
 import com.arturkida.popularmovieskotlin.R
+import com.arturkida.popularmovieskotlin.data.local.AppDatabase
+import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.model.Movie
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModelFactory
 import com.arturkida.popularmovieskotlin.utils.Constants
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_details.*
+import org.koin.android.ext.android.inject
 
 class DetailsFragment : Fragment() {
+
+    private val repository by inject<AppDatabase>()
 
     companion object {
         fun newInstance() = DetailsFragment()
     }
 
     private lateinit var movie: Movie
-    private lateinit var viewModel: DetailsViewModel
+        private val viewModel by lazy {
+        val repository = MovieRepository(repository.movieDao())
+        val factory = MoviesViewModelFactory(repository)
+        ViewModelProviders.of(this, factory)
+            .get(MoviesViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,17 +50,16 @@ class DetailsFragment : Fragment() {
     private fun setupFragment() {
         getIntents()
         loadMovieInfo()
-        setViewModel()
         setListeners()
     }
 
     private fun setListeners() {
         iv_favorite_star.setOnClickListener {
             if (!movie.favorite) {
-                viewModel.addMovie(movie)
+                viewModel.addFavoriteMovie(movie)
                 movie.favorite = true
             } else {
-                viewModel.deleteMovie(movie)
+                viewModel.deleteFavoriteMovie(movie)
                 movie.favorite = false
             }
 
@@ -60,10 +71,6 @@ class DetailsFragment : Fragment() {
         activity?.intent?.let {
             movie = it.getParcelableExtra(Constants.INTENT_MOVIE_INFO)
         }
-    }
-
-    private fun setViewModel() {
-        viewModel = ViewModelProviders.of(this).get(DetailsViewModel::class.java)
     }
 
     private fun loadMovieInfo() {
