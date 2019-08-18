@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.adapter.MoviesListAdapter
 import com.arturkida.popularmovieskotlin.model.Genre
@@ -33,7 +33,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private var filteredList = mutableListOf<Movie>()
 
     private val adapter: MoviesListAdapter by lazy {
-            MoviesListAdapter(context, moviesList, this)
+        MoviesListAdapter(context, moviesList, this)
     }
 
     override fun onCreateView(
@@ -60,17 +60,19 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun getGenres() {
         viewModel.getGenres().observe(this, Observer {genres ->
-            genres?.let {
+            genres?.data?.let {
                 genresList.clear()
                 genresList.addAll(it)
-                Log.i("configura", genresList.toString())
+            }
+            genres?.error?.let {
+                showErrorMessage(Constants.GENRES_ERROR)
             }
         })
     }
 
     private fun getPopularMovies() {
         viewModel.getPopularMovies().observe(this, Observer {movies ->
-            movies?.let {
+            movies?.data?.let {
                 moviesList.clear()
                 moviesList.addAll(it)
                 updateMoviesFavoriteStatus()
@@ -79,11 +81,18 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 swipe_movie_list.isRefreshing = false
                 removeFocus()
             }
+            movies?.error?.let {
+                showErrorMessage(Constants.MOVIES_ERROR)
+            }
         })
     }
 
+    private fun showErrorMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun getFavoritesMovies() {
-        viewModel.getFavoritesMovies()?.observe(this, Observer {favorites ->
+        viewModel.getFavoritesMovies().observe(this, Observer {favorites ->
             favorites?.let {
                 updateMoviesFavoriteStatus()
                 updateAdapter(moviesList)
@@ -127,21 +136,21 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun searchMoviesBy(searchType: SearchType, searchBar: EditText) {
-            val searchString = searchBar.text.toString()
+        val searchString = searchBar.text.toString()
 
-            if (searchString.isBlank()) {
-                updateAdapter(moviesList)
-                showMovieScreen(moviesList)
-            } else {
-                val filteredMovies = viewModel.searchMovies(
-                    searchString,
-                    searchType,
-                    moviesList
-                )
+        if (searchString.isBlank()) {
+            updateAdapter(moviesList)
+            showMovieScreen(moviesList)
+        } else {
+            val filteredMovies = viewModel.searchMovies(
+                searchString,
+                searchType,
+                moviesList
+            )
 
-                updateMoviesListBy(filteredMovies, searchBar)
-                showMovieScreen(filteredList)
-            }
+            updateMoviesListBy(filteredMovies, searchBar)
+            showMovieScreen(filteredList)
+        }
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
