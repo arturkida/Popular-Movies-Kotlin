@@ -67,4 +67,8 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espresso_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espresso_version"
     implementation "com.android.support.test.espresso:espresso-intents:$rootProject.espresso_version"
+
+    // Koin
+    implementation "org.koin:koin-android:$rootProject.koin_version"
+    implementation "org.koin:koin-android-viewmodel:$rootProject.koin_version"
 }

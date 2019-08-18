@@ -1,7 +1,6 @@
 package com.arturkida.popularmovieskotlin.ui.home
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,26 +15,22 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.adapter.MoviesListAdapter
-import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
 import com.arturkida.popularmovieskotlin.ui.details.DetailsActivity
 import com.arturkida.popularmovieskotlin.utils.Constants
 import com.arturkida.popularmovieskotlin.utils.SearchType
 import kotlinx.android.synthetic.main.fragment_movies.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
+
+    private val viewModel by viewModel<MoviesViewModel>()
 
     private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
     private var filteredList = mutableListOf<Movie>()
-
-    private val viewModel by lazy {
-        val repository = MovieRepository(context)
-        val factory = MoviesViewModelFactory(repository)
-        ViewModelProviders.of(this, factory)
-            .get(MoviesViewModel::class.java)
-    }
 
     private val adapter: MoviesListAdapter by lazy {
             MoviesListAdapter(context, moviesList, this)

@@ -1,6 +1,5 @@
 package com.arturkida.popularmovieskotlin.ui.details
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,9 +8,11 @@ import android.view.ViewGroup
 import com.arturkida.popularmovieskotlin.BuildConfig
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.model.Movie
+import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
 import com.arturkida.popularmovieskotlin.utils.Constants
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_details.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailsFragment : Fragment() {
 
@@ -19,8 +20,9 @@ class DetailsFragment : Fragment() {
         fun newInstance() = DetailsFragment()
     }
 
+    private val viewModel by viewModel<MoviesViewModel>()
+
     private lateinit var movie: Movie
-    private lateinit var viewModel: DetailsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,17 +40,16 @@ class DetailsFragment : Fragment() {
     private fun setupFragment() {
         getIntents()
         loadMovieInfo()
-        setViewModel()
         setListeners()
     }
 
     private fun setListeners() {
         iv_favorite_star.setOnClickListener {
             if (!movie.favorite) {
-                viewModel.addMovie(movie)
+                viewModel.addFavoriteMovie(movie)
                 movie.favorite = true
             } else {
-                viewModel.deleteMovie(movie)
+                viewModel.deleteFavoriteMovie(movie)
                 movie.favorite = false
             }
 
@@ -60,10 +61,6 @@ class DetailsFragment : Fragment() {
         activity?.intent?.let {
             movie = it.getParcelableExtra(Constants.INTENT_MOVIE_INFO)
         }
-    }
-
-    private fun setViewModel() {
-        viewModel = ViewModelProviders.of(this).get(DetailsViewModel::class.java)
     }
 
     private fun loadMovieInfo() {
