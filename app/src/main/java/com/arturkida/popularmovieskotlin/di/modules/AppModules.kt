@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import com.arturkida.popularmovieskotlin.data.local.AppDatabase
 import com.arturkida.popularmovieskotlin.data.local.MovieDao
 import com.arturkida.popularmovieskotlin.data.local.MovieRepository
+import com.arturkida.popularmovieskotlin.data.remote.ApiImpl
 import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
 import com.arturkida.popularmovieskotlin.utils.Constants
 import org.koin.android.viewmodel.dsl.viewModel
@@ -23,7 +24,10 @@ val appModules = module {
     single<MovieRepository> {
         MovieRepository(get<MovieDao>())
     }
-    viewModel {
-        MoviesViewModel(get())
+    single<ApiImpl> {
+        ApiImpl()
+    }
+    viewModel<MoviesViewModel> {
+        MoviesViewModel(get(), get())
     }
 }

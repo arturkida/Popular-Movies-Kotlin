@@ -2,17 +2,19 @@ package com.arturkida.popularmovieskotlin.ui
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import com.arturkida.popularmovieskotlin.data.Resource
 import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.data.remote.ApiImpl
 import com.arturkida.popularmovieskotlin.model.Movie
 import com.arturkida.popularmovieskotlin.utils.SearchType
 
 class MoviesViewModel(
-    private val repository: MovieRepository
+    private val repository: MovieRepository,
+    private val apiImpl: ApiImpl
 ) : ViewModel() {
 
     private val genres = getGenres()
-    private var popularMovies: LiveData<List<Movie>?> = getPopularMovies()
+    private var popularMovies: LiveData<Resource<List<Movie>?>> = getPopularMovies()
     private var favoriteMovies: LiveData<List<Movie>?> = getFavoritesMovies()
     private var filteredMovies = mutableListOf<Movie>()
 
@@ -54,9 +56,9 @@ class MoviesViewModel(
         return false
     }
 
-    fun getGenres() = ApiImpl().getGenres()
+    fun getGenres() = apiImpl.getGenres()
 
-    fun getPopularMovies() = ApiImpl().getPopularMovies()
+    fun getPopularMovies() = apiImpl.getPopularMovies()
 
     fun getFavoritesMovies() : LiveData<List<Movie>?> {
         val favoritesList = repository.getMoviesFromDatabase()

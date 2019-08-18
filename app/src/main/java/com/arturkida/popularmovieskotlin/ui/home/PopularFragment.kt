@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,14 +65,14 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 genresList.addAll(it)
             }
             genres?.error?.let {
-                Toast.makeText(context, "Error getting genres", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, Constants.GENRES_ERROR, Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun getPopularMovies() {
         viewModel.getPopularMovies().observe(this, Observer {movies ->
-            movies?.let {
+            movies?.data?.let {
                 moviesList.clear()
                 moviesList.addAll(it)
                 updateMoviesFavoriteStatus()
@@ -81,6 +80,9 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 showMovieScreen(moviesList)
                 swipe_movie_list.isRefreshing = false
                 removeFocus()
+            }
+            movies?.error?.let {
+                Toast.makeText(context, Constants.MOVIES_ERROR, Toast.LENGTH_SHORT).show()
             }
         })
     }

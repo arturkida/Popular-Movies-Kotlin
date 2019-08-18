@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApiImpl {
 
     private val genres = MutableLiveData<Resource<List<Genre>?>>()
-    private val movies = MutableLiveData<List<Movie>?>()
+    private val movies = MutableLiveData<Resource<List<Movie>?>>()
 
     companion object {
         val retrofit: Api = Retrofit.Builder()
@@ -51,21 +51,23 @@ class ApiImpl {
         return genres
     }
 
-    fun getPopularMovies() : LiveData<List<Movie>?> {
+    fun getPopularMovies() : LiveData<Resource<List<Movie>?>> {
         val call = retrofit.getPopularMovies(BuildConfig.MOVIEDB_API_KEY)
 
         EspressoIdlingResource.increment()
 
         call.enqueue(object : Callback<ResultMovies?> {
             override fun onFailure(call: Call<ResultMovies?>?, t: Throwable?) {
-                movies.value = emptyList()
+                val moviesList = movies.value?.data ?: emptyList()
+
+                movies.value = Resource(data = moviesList, error = t)
                 EspressoIdlingResource.decrement()
             }
             override fun onResponse(call: Call<ResultMovies?>?, response: Response<ResultMovies?>?) {
-                response?.body()?.let {
-                    movies.value = it.results
-                    EspressoIdlingResource.decrement()
-                }
+                val moviesList = response?.body()?.results ?: emptyList()
+
+                movies.value = Resource(data = moviesList, error = null)
+                EspressoIdlingResource.decrement()
             }
         })
 
