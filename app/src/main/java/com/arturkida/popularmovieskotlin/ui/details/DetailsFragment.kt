@@ -1,6 +1,5 @@
 package com.arturkida.popularmovieskotlin.ui.details
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,15 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.arturkida.popularmovieskotlin.BuildConfig
 import com.arturkida.popularmovieskotlin.R
-import com.arturkida.popularmovieskotlin.data.local.AppDatabase
-import com.arturkida.popularmovieskotlin.data.local.MovieRepository
 import com.arturkida.popularmovieskotlin.model.Movie
 import com.arturkida.popularmovieskotlin.ui.MoviesViewModel
-import com.arturkida.popularmovieskotlin.ui.MoviesViewModelFactory
 import com.arturkida.popularmovieskotlin.utils.Constants
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_details.*
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailsFragment : Fragment() {
 
@@ -24,15 +20,9 @@ class DetailsFragment : Fragment() {
         fun newInstance() = DetailsFragment()
     }
 
-    private val repository by inject<MovieRepository>()
+    private val viewModel by viewModel<MoviesViewModel>()
 
     private lateinit var movie: Movie
-
-    private val viewModel by lazy {
-        val factory = MoviesViewModelFactory(repository)
-        ViewModelProviders.of(this, factory)
-            .get(MoviesViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
