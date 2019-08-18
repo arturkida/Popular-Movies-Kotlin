@@ -37,7 +37,7 @@ class ApiImpl {
             override fun onFailure(call: Call<ResultGenres?>?, t: Throwable?) {
                 val genresList = genres.value?.data ?: emptyList()
 
-                genres.value = Resource(data = genresList, error = null)
+                genres.value = Resource(data = genresList, error = t)
                 EspressoIdlingResource.decrement()
             }
             override fun onResponse(call: Call<ResultGenres?>?, response: Response<ResultGenres?>?) {

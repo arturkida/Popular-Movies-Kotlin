@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.adapter.MoviesListAdapter
 import com.arturkida.popularmovieskotlin.model.Genre
@@ -28,14 +29,12 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private val viewModel by viewModel<MoviesViewModel>()
 
-    private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
     private var filteredList = mutableListOf<Movie>()
 
     private val adapter: MoviesListAdapter by lazy {
         MoviesListAdapter(context, moviesList, this)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +56,6 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         setSearchSpinner()
         removeFocus()
 
-        getGenres()
         getFavoriteMovies()
     }
 
@@ -135,17 +133,8 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
         imm.hideSoftInputFromWindow(activity?.window?.currentFocus?.windowToken, 0)
     }
 
-    private fun getGenres() {
-        viewModel.getGenres().observe(this, Observer {genres ->
-            genres?.data?.let {
-                genresList.clear()
-                genresList.addAll(it)
-            }
-        })
-    }
-
     private fun getFavoriteMovies() {
-        viewModel.getFavoritesMovies()?.observe(this, Observer {favorites ->
+        viewModel.getFavoritesMovies().observe(this, Observer {favorites ->
             moviesList.clear()
 
             favorites?.let {

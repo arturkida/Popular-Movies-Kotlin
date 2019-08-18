@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.arturkida.popularmovieskotlin.R
 import com.arturkida.popularmovieskotlin.adapter.MoviesListAdapter
 import com.arturkida.popularmovieskotlin.model.Genre
@@ -63,7 +64,9 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
             genres?.data?.let {
                 genresList.clear()
                 genresList.addAll(it)
-                Log.i("configura", genresList.toString())
+            }
+            genres?.error?.let {
+                Toast.makeText(context, "Error getting genres", Toast.LENGTH_SHORT).show()
             }
         })
     }
