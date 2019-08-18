@@ -67,7 +67,7 @@ class MoviesViewModelTest : BaseUnitTest() {
         // Given
         val testMovie = getSingleMovieList()
 
-        every { moviesViewModel.isMovieFavorited(testMovie[0]) } returns true
+        every { moviesViewModel.isMovieFavorite(testMovie[0]) } returns true
 
         // When
         val testResult = moviesViewModel.updateFavoriteStatusOf(testMovie[0])
@@ -81,7 +81,7 @@ class MoviesViewModelTest : BaseUnitTest() {
         // Given
         val testMovie = getSingleMovieList()
 
-        every { moviesViewModel.isMovieFavorited(testMovie[0]) } returns false
+        every { moviesViewModel.isMovieFavorite(testMovie[0]) } returns false
 
         // When
         val testResult = moviesViewModel.updateFavoriteStatusOf(testMovie[0])
