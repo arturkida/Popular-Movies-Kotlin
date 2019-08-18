@@ -2,6 +2,7 @@ package com.arturkida.popularmovieskotlin
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.arturkida.popularmovieskotlin.data.Resource
 import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
 
@@ -9,21 +10,35 @@ open class BaseUnitTest {
 
     private val testGenreIds: List<Int> = listOf(12, 878, 28)
 
-    fun getGenresList(): MutableLiveData<List<Genre>> {
+    fun getGenresList(): LiveData<Resource<List<Genre>?>> {
         val genres = listOf(
             Genre(12, "Action"),
             Genre(878, "Adventure"),
             Genre(28, "Science Fiction"))
 
-        val liveData = MutableLiveData<List<Genre>>()
-        liveData.value = genres
+        val liveData = MutableLiveData<Resource<List<Genre>?>>()
+        liveData.value = Resource(genres, null)
 
         return liveData
     }
 
-    fun getSingleLiveDataMovieList(): LiveData<List<Movie>> {
-        val liveData = MutableLiveData<List<Movie>>()
-        liveData.value = getSingleMovieList()
+    fun getSingleLiveDataMovieList(): LiveData<Resource<List<Movie>?>> {
+        val liveData = MutableLiveData<Resource<List<Movie>?>>()
+        liveData.value = Resource(getSingleMovieList(), null)
+
+        return liveData
+    }
+
+    fun getSingleLiveDataResourceFavoriteMovieList(): LiveData<Resource<List<Movie>?>> {
+        val liveData = MutableLiveData<Resource<List<Movie>?>>()
+        liveData.value = Resource(getSingleFavoriteMovieList(), null)
+
+        return liveData
+    }
+
+    fun getSingleLiveDataFavoriteMovieList(): LiveData<List<Movie>?> {
+        val liveData = MutableLiveData<List<Movie>?>()
+        liveData.value = getSingleFavoriteMovieList()
 
         return liveData
     }
