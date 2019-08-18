@@ -55,7 +55,7 @@ class ApiImpl {
 
         call.enqueue(object : Callback<ResultMovies?> {
             override fun onFailure(call: Call<ResultMovies?>?, t: Throwable?) {
-                movies.value = null
+                movies.value = emptyList()
                 EspressoIdlingResource.decrement()
             }
             override fun onResponse(call: Call<ResultMovies?>?, response: Response<ResultMovies?>?) {

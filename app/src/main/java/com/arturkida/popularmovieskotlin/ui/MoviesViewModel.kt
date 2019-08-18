@@ -12,7 +12,7 @@ class MoviesViewModel(
 ) : ViewModel() {
 
     private val genres = getGenres()
-    private var popularMovies = getPopularMovies()
+    private var popularMovies: LiveData<List<Movie>?> = getPopularMovies()
     private var favoriteMovies: LiveData<List<Movie>?> = getFavoritesMovies()
     private var filteredMovies = mutableListOf<Movie>()
 
