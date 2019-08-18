@@ -39,12 +39,12 @@ class MoviesViewModel(
     }
 
     fun updateFavoriteStatusOf(movie: Movie): Movie {
-        movie.favorite = isMovieFavorited(movie)
+        movie.favorite = isMovieFavorite(movie)
 
         return movie
     }
 
-    private fun isMovieFavorited(movie: Movie): Boolean {
+    fun isMovieFavorite(movie: Movie): Boolean {
         favoriteMovies.value?.let { favoritesList ->
             favoritesList.forEach { favoriteMovie ->
                 if (favoriteMovie.id == movie.id) {
