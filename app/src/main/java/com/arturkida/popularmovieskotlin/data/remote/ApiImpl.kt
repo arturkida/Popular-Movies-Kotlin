@@ -3,6 +3,7 @@ package com.arturkida.popularmovieskotlin.data.remote
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.arturkida.popularmovieskotlin.BuildConfig
+import com.arturkida.popularmovieskotlin.data.Resource
 import com.arturkida.popularmovieskotlin.idlingresource.EspressoIdlingResource
 import com.arturkida.popularmovieskotlin.model.Genre
 import com.arturkida.popularmovieskotlin.model.Movie
@@ -16,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiImpl {
 
-    private val genres = MutableLiveData<List<Genre>?>()
+    private val genres = MutableLiveData<Resource<List<Genre>?>>()
     private val movies = MutableLiveData<List<Movie>?>()
 
     companion object {
@@ -27,21 +28,23 @@ class ApiImpl {
             .create(Api::class.java)
     }
 
-    fun getGenres(): LiveData<List<Genre>?> {
+    fun getGenres(): LiveData<Resource<List<Genre>?>> {
         val call = retrofit.getGenres(BuildConfig.MOVIEDB_API_KEY)
 
         EspressoIdlingResource.increment()
 
         call.enqueue(object : Callback<ResultGenres?> {
             override fun onFailure(call: Call<ResultGenres?>?, t: Throwable?) {
-                genres.value = null
+                val genresList = genres.value?.data ?: emptyList()
+
+                genres.value = Resource(data = genresList, error = null)
                 EspressoIdlingResource.decrement()
             }
             override fun onResponse(call: Call<ResultGenres?>?, response: Response<ResultGenres?>?) {
-                response?.body()?.let {
-                    genres.value = it.genres
-                    EspressoIdlingResource.decrement()
-                }
+                val genresList = response?.body()?.genres ?: emptyList()
+
+                genres.value = Resource(data = genresList, error = null)
+                EspressoIdlingResource.decrement()
             }
         })
 

@@ -137,7 +137,7 @@ class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun getGenres() {
         viewModel.getGenres().observe(this, Observer {genres ->
-            genres?.let {
+            genres?.data?.let {
                 genresList.clear()
                 genresList.addAll(it)
             }

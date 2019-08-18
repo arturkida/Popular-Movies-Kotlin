@@ -21,7 +21,7 @@ class MoviesViewModel(
     fun populateGenresNameFrom(movie: Movie): Movie {
 
         movie.genre_names = ""
-        genres.value?.let {genresList ->
+        genres.value?.data?.let {genresList ->
             genresList.forEach {genre ->
                 if (movie.genre_ids.contains(genre.id)) {
                     if (movie.genre_names == "") {

@@ -60,7 +60,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
     private fun getGenres() {
         viewModel.getGenres().observe(this, Observer {genres ->
-            genres?.let {
+            genres?.data?.let {
                 genresList.clear()
                 genresList.addAll(it)
                 Log.i("configura", genresList.toString())
@@ -83,7 +83,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun getFavoritesMovies() {
-        viewModel.getFavoritesMovies()?.observe(this, Observer {favorites ->
+        viewModel.getFavoritesMovies().observe(this, Observer {favorites ->
             favorites?.let {
                 updateMoviesFavoriteStatus()
                 updateAdapter(moviesList)
