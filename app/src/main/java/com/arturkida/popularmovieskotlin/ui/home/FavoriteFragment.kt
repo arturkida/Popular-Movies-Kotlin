@@ -31,14 +31,13 @@ import org.koin.android.ext.android.inject
 
 class FavoriteFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
 
-    private val repository by inject<AppDatabase>()
+    private val repository by inject<MovieRepository>()
 
     private var genresList = mutableListOf<Genre>()
     private var moviesList = mutableListOf<Movie>()
     private var filteredList = mutableListOf<Movie>()
 
     private val viewModel by lazy {
-        val repository = MovieRepository(repository.movieDao())
         val factory = MoviesViewModelFactory(repository)
         ViewModelProviders.of(this, factory)
             .get(MoviesViewModel::class.java)

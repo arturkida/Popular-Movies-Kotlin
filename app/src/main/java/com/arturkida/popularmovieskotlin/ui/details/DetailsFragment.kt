@@ -20,15 +20,15 @@ import org.koin.android.ext.android.inject
 
 class DetailsFragment : Fragment() {
 
-    private val repository by inject<AppDatabase>()
-
     companion object {
         fun newInstance() = DetailsFragment()
     }
 
+    private val repository by inject<MovieRepository>()
+
     private lateinit var movie: Movie
-        private val viewModel by lazy {
-        val repository = MovieRepository(repository.movieDao())
+
+    private val viewModel by lazy {
         val factory = MoviesViewModelFactory(repository)
         ViewModelProviders.of(this, factory)
             .get(MoviesViewModel::class.java)
