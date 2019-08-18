@@ -33,7 +33,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     private var filteredList = mutableListOf<Movie>()
 
     private val adapter: MoviesListAdapter by lazy {
-            MoviesListAdapter(context, moviesList, this)
+        MoviesListAdapter(context, moviesList, this)
     }
 
     override fun onCreateView(
@@ -65,7 +65,7 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 genresList.addAll(it)
             }
             genres?.error?.let {
-                Toast.makeText(context, Constants.GENRES_ERROR, Toast.LENGTH_SHORT).show()
+                showErrorMessage(Constants.GENRES_ERROR)
             }
         })
     }
@@ -82,9 +82,13 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
                 removeFocus()
             }
             movies?.error?.let {
-                Toast.makeText(context, Constants.MOVIES_ERROR, Toast.LENGTH_SHORT).show()
+                showErrorMessage(Constants.MOVIES_ERROR)
             }
         })
+    }
+
+    private fun showErrorMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun getFavoritesMovies() {
@@ -132,21 +136,21 @@ class PopularFragment : Fragment(), MoviesListAdapter.MovieItemClickListener {
     }
 
     private fun searchMoviesBy(searchType: SearchType, searchBar: EditText) {
-            val searchString = searchBar.text.toString()
+        val searchString = searchBar.text.toString()
 
-            if (searchString.isBlank()) {
-                updateAdapter(moviesList)
-                showMovieScreen(moviesList)
-            } else {
-                val filteredMovies = viewModel.searchMovies(
-                    searchString,
-                    searchType,
-                    moviesList
-                )
+        if (searchString.isBlank()) {
+            updateAdapter(moviesList)
+            showMovieScreen(moviesList)
+        } else {
+            val filteredMovies = viewModel.searchMovies(
+                searchString,
+                searchType,
+                moviesList
+            )
 
-                updateMoviesListBy(filteredMovies, searchBar)
-                showMovieScreen(filteredList)
-            }
+            updateMoviesListBy(filteredMovies, searchBar)
+            showMovieScreen(filteredList)
+        }
     }
 
     private fun updateMoviesListBy(filteredMovies: MutableList<Movie>, searchBar: EditText) {
